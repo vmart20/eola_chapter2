@@ -1,3 +1,7 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+# The above encoding declaration is required and the file must be saved as UTF-8
+
 from mobject.tex_mobject import TexMobject
 from mobject import Mobject
 from mobject.image_mobject import ImageMobject
@@ -45,7 +49,7 @@ class ComputerScientist(PiCreature):
 class OpeningQuote(Scene):
     def construct(self):
         words = TextMobject(
-            "``The introduction of numbers as \\\\ coordinates is an act of violence.''",
+            u"\\textarmenian{զրո}",
         )
         words.to_edge(UP)    
         for mob in words.submobjects[27:27+11]:

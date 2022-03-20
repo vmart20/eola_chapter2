@@ -1,7 +1,8 @@
 \documentclass[12pt]{beamer}
 
 \usepackage[english]{babel}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[OT6,T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{dsfont}
@@ -9,6 +10,9 @@
 \usepackage{tipa}
 \usepackage{relsize}
 \usepackage{textcomp}
+
+\newcommand{\armenian}{\fontencoding{OT6}\fontfamily{cmr}\selectfont}
+\DeclareTextFontCommand{\textarmenian}{\armenian}
 
 \mode<presentation>
 {

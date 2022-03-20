@@ -1,6 +1,7 @@
 from vectorized_mobject import VMobject
 from svg_mobject import SVGMobject, VMobjectFromSVGPathstring
 from helpers import *
+import codecs
 
 TEX_MOB_SCALE_VAL = 0.05
 TEXT_MOB_SCALE_VAL = 0.05
@@ -132,7 +133,7 @@ def generate_tex_file(expression, template_tex_file):
         with open(template_tex_file, "r") as infile:
             body = infile.read()
             body = body.replace(TEX_TEXT_TO_REPLACE, expression)
-        with open(result, "w") as outfile:
+        with codecs.open(result, "w", "utf-8") as outfile:
             outfile.write(body)
     return result
 
