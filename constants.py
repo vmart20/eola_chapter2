@@ -15,7 +15,7 @@ MEDIUM_QUALITY_CAMERA_CONFIG = {
 }
 
 LOW_QUALITY_CAMERA_CONFIG = {
-    "pixel_shape" : (480, 853),
+    "pixel_shape" : (480, 854),
 }
 
 

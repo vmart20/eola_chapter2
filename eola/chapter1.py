@@ -49,12 +49,12 @@ class ComputerScientist(PiCreature):
 class OpeningQuote(Scene):
     def construct(self):
         words = TextMobject(
-            u"\\textarmenian{զրո}",
+            u"«Թվերը որպես կոորդինատներ \\\\ ներկայացնելը բռնության դրսևորում է»։",
         )
         words.to_edge(UP)    
-        for mob in words.submobjects[27:27+11]:
+        for mob in words.submobjects[11:11+12]:
             mob.highlight(GREEN)
-        author = TextMobject("-Hermann Weyl")
+        author = TextMobject(u"—Հերման Վայլ")
         author.highlight(YELLOW)
         author.next_to(words, DOWN, buff = 0.5)
 
@@ -70,9 +70,9 @@ class DifferentConceptions(Scene):
         mathy = Mathematician(mode = "pondering")        
         compy = ComputerScientist()
         creatures = [physy, compy, mathy]
-        physy.title = TextMobject("Physics student").to_corner(DOWN+LEFT)
-        compy.title = TextMobject("CS student").to_corner(DOWN+RIGHT)
-        mathy.title = TextMobject("Mathematician").to_edge(DOWN)
+        physy.title = TextMobject(u"Ֆիզիկայի \\\\ուսանող").to_corner(DOWN+LEFT)
+        compy.title = TextMobject(u"Ծրագրավորման\\\\ուսանող").to_corner(DOWN+RIGHT)
+        mathy.title = TextMobject(u" Մաթեմատիկոս").to_edge(DOWN)
         names = VMobject(physy.title, mathy.title, compy.title)
         names.arrange_submobjects(RIGHT, buff = 1)
         names.to_corner(DOWN+LEFT)
@@ -132,18 +132,18 @@ class DifferentConceptions(Scene):
         vector = Vector(2*RIGHT)
         vector.next_to(physy, UP+RIGHT)
         brace = Brace(vector, DOWN)
-        length = TextMobject("Length")
+        length = TextMobject(u"Երկարություն")
         length.next_to(brace, DOWN)
         group = VMobject(vector, brace, length)
         group.rotate_in_place(np.pi/6)
         vector.get_center = lambda : vector.get_start()        
 
-        direction = TextMobject("Direction")
+        direction = TextMobject(u"Ուղղություն")
         direction.next_to(vector, RIGHT)
         direction.shift(UP)
 
-        two_dimensional = TextMobject("Two-dimensional")
-        three_dimensional = TextMobject("Three-dimensional")
+        two_dimensional = TextMobject(u"Երկչափ").scale(1.5)
+        three_dimensional = TextMobject(u"Եռաչափ").scale(1.5)
         two_dimensional.to_corner(UP+RIGHT)
         three_dimensional.to_corner(UP+RIGHT)
 
@@ -205,7 +205,7 @@ class DifferentConceptions(Scene):
         self.fade_all_but(creatures, 1)
         physy, compy, mathy = creatures
 
-        title = TextMobject("Vectors $\\Leftrightarrow$ lists of numbers")
+        title = TextMobject(u"Վեկտորներ $\\Leftrightarrow$ թվերի հավաքածուներ")
         title.to_edge(UP)
 
         vectors = VMobject(*map(matrix_to_mobject, [
@@ -233,10 +233,10 @@ class DifferentConceptions(Scene):
         house.set_fill(BLUE_C, opacity = 1)
         house.scale_to_fit_height(3)
         house.center()
-        square_footage_words = TextMobject("Square footage:")
-        price_words = TextMobject("Price: ")
-        square_footage = TexMobject("2{,}600\\text{ ft}^2")
-        price = TextMobject("\\$300{,}000")
+        square_footage_words = TextMobject(u"Մակերես`")
+        price_words = TextMobject(u"Գին՝  ")
+        square_footage = TexMobject(u"240\\textarmenian{ մ}^2")
+        price = TextMobject(u"\\$300{,}000")
 
         house.to_edge(LEFT).shift(UP)
         square_footage_words.next_to(house, RIGHT)
@@ -255,13 +255,13 @@ class DifferentConceptions(Scene):
         not_equals = TexMobject("\\ne")
         not_equals.next_to(vector)
         alt_vector = Matrix([
-            TextMobject("300{,}000\\text{ ft}^2").highlight(RED),
-            TextMobject("\\$2{,}600").highlight(GREEN)
+            TextMobject(u"300{,}000\\textarmenian{ մ}^2").highlight(RED),
+            TextMobject("\\$240").highlight(GREEN)
         ])
         alt_vector.next_to(not_equals)
 
         brace = Brace(vector, RIGHT)
-        two_dimensional = TextMobject("2 dimensional")
+        two_dimensional = TextMobject(u"Երկչափ")
         two_dimensional.next_to(brace)
         brackets = vector.get_brackets()
 
@@ -338,7 +338,7 @@ class DifferentConceptions(Scene):
         syms.arrange_submobjects(RIGHT)
         syms.center().shift(2*UP)
 
-        statement = TextMobject("We'll ignore him \\\\ for now")
+        statement = TextMobject(u"Առայժմ կանտեսենք նրան")
         statement.highlight(PINK)
         statement.scale_to_fit_width(arrays.get_width())
         statement.next_to(arrays, DOWN, buff = 1.5)
@@ -435,14 +435,14 @@ class HelpsToHaveOneThought(Scene):
         randy = randys.split()[1]
 
         speech_bubble = morty.get_bubble("speech")
-        words = TextMobject("Think of some vector...")
+        words = TextMobject(u"Մտածեք որևէ վեկտորի մասին...")
         speech_bubble.position_mobject_inside(words)
         thought_bubble = randy.get_bubble()
         arrow = Vector([2, 1]).scale(0.7)
-        or_word = TextMobject("or")
+        or_word = TextMobject(u"թե՞")
         array = Matrix([2, 1]).scale(0.5)
-        q_mark = TextMobject("?")
-        thought = VMobject(arrow, or_word, array, q_mark)
+        # q_mark = TextMobject(u"՞")
+        thought = VMobject(arrow, or_word, array)
         thought.arrange_submobjects(RIGHT, buff = 0.2)
         thought_bubble.position_mobject_inside(thought)
         thought_bubble.set_fill(BLACK, opacity = 1)
@@ -480,7 +480,7 @@ class HowIWantYouToThinkAboutVectors(Scene):
 
         dot = Dot(radius = 0.1)
         dot.highlight(RED)
-        tail_word = TextMobject("Tail")
+        tail_word = TextMobject(u"Սկզբնակետ")
         tail_word.shift(0.5*DOWN+2.5*LEFT)
         line = Line(tail_word, dot)
 
@@ -566,7 +566,7 @@ class CoordinateSystemWalkthrough(VectorScene):
             lambda m : isinstance(m, Line),
             plane.submobject_family()
         )
-        origin_words = TextMobject("Origin")
+        origin_words = TextMobject(u"Կորդինատների\\\\սկզբակետ")
         origin_words.shift(2*UP+2*LEFT)
         dot = Dot(radius = 0.1).highlight(RED)
         line = Line(origin_words.get_bottom(), dot.get_corner(UP+LEFT))
@@ -629,7 +629,7 @@ class CoordinateSystemWalkthrough(VectorScene):
         y_label_copy.highlight(Y_COLOR)
 
         point = Dot(4*LEFT+2*UP)
-        point_word = TextMobject("(-4, 2) as \\\\ a point")
+        point_word = TextMobject(u"(-4, 2)-ը որպես \\\\կետ")
         point_word.scale(0.7)
         point_word.next_to(point, DOWN)
         point.add(point_word)
@@ -706,8 +706,8 @@ class VectorAddition(VectorScene):
         return v1, v2, v_sum
 
     def ask_why(self, v1, v2, v_sum):
-        why = TextMobject("Why?")
-        why_not_this = TextMobject("Why not \\\\ this?")
+        why = TextMobject(u"Ինչո՞ւ \\\\այսպես")
+        why_not_this = TextMobject(u"Ինչո՞ւ ոչ \\\\այսպես")
         new_v2 = v2.copy().shift(-v2.get_start())
         new_v_sum = v_sum.copy()
         alt_vect_sum = new_v2.get_end() - v1.get_end()
@@ -998,14 +998,14 @@ class ShowScalarMultiplication(VectorScene):
         long_v = Vector(2*v.get_end())
         long_minus_v = Vector(-2*v.get_end())
         original_v = v.copy()
-        scaling_word = TextMobject("``Scaling''").to_corner(UP+LEFT)
+        scaling_word = TextMobject(u'$``$Սկալյառներ$"$').to_corner(UP+LEFT)
         scaling_word.shift(2*RIGHT)
         scalars = VMobject(*map(TexMobject, [
             "2,", "\\dfrac{1}{3},", "-1.8,", "\\dots"
         ]))
         scalars.arrange_submobjects(RIGHT, buff = 0.4)
         scalars.next_to(scaling_word, DOWN, aligned_edge = LEFT)
-        scalars_word = TextMobject("``Scalars''")
+        scalars_word = TextMobject(u'$``$Սկալյառներ$"$')
         scalars_word.next_to(scalars, DOWN, aligned_edge = LEFT)
 
         self.remove(plane)
@@ -1118,8 +1118,8 @@ class ItDoesntMatterWhich(Scene):
     def construct(self):
         physy = Physicist()
         compy = ComputerScientist()
-        physy.title = TextMobject("Physics student").to_corner(DOWN+LEFT)
-        compy.title = TextMobject("CS student").to_corner(DOWN+RIGHT)
+        physy.title = TextMobject(u"Ֆիզիկայի ուսանող").to_corner(DOWN+LEFT)
+        compy.title = TextMobject(u"Ծրագրավորման ուսանող").to_corner(DOWN+RIGHT)
         for pi in physy, compy:
             pi.next_to(pi.title, UP)
             self.add(pi, pi.title)
@@ -1265,7 +1265,7 @@ class CodingMathyAnimation(Scene):
 
 class NextVideo(Scene):
     def construct(self):
-        title = TextMobject("Next video: Linear combinations, span, and bases")
+        title = TextMobject(u"Հաջորդ տեսանյութը․ «Գծային զուգակցություններ, գծային թաղանթ և հենք»").scale(0.8)
         title.to_edge(UP)
         rect = Rectangle(width = 16, height = 9, color = BLUE)
         rect.scale_to_fit_height(6)

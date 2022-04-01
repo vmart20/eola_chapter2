@@ -13,6 +13,10 @@
 
 \newcommand{\armenian}{\fontencoding{OT6}\fontfamily{cmr}\selectfont}
 \DeclareTextFontCommand{\textarmenian}{\armenian}
+\newcommand{\english}{\fontencoding{T1}\fontfamily{cmr}\selectfont}
+\DeclareTextFontCommand{\textenglish}{\english}
+
+\newenvironment{myfont}{\fontencoding{OT6}\fontfamily{cmr}\selectfont}{\par}
 
 \mode<presentation>
 {
@@ -23,9 +27,11 @@
   \setbeamertemplate{caption}[numbered]
 }
 \begin{document}
+\begin{myfont}
 
 \begin{frame}
     YourTextHere
 \end{frame}
 
+\end{myfont}
 \end{document}
