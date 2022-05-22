@@ -173,7 +173,7 @@ class VectorScene(Scene):
 
     def label_vector(self, vector, label, animate = True, 
                      direction = "left", rotate = False,
-                     color = WHITE, add_to_vector = False,
+                     color = WHITE, add_to_vector = True,
                      buff_factor = 2, 
                      label_scale_val = VECTOR_LABEL_SCALE_VAL):
         if len(label) == 1:

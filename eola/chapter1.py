@@ -54,7 +54,7 @@ class OpeningQuote(Scene):
         words.to_edge(UP)    
         for mob in words.submobjects[11:11+12]:
             mob.highlight(GREEN)
-        author = TextMobject(u"—Հերման Վայլ")
+        author = TextMobject(u"— Հերման Վայլ")
         author.highlight(YELLOW)
         author.next_to(words, DOWN, buff = 0.5)
 
@@ -69,13 +69,15 @@ class DifferentConceptions(Scene):
         physy = Physicist()
         mathy = Mathematician(mode = "pondering")        
         compy = ComputerScientist()
-        creatures = [physy, compy, mathy]
-        physy.title = TextMobject(u"Ֆիզիկայի \\\\ուսանող").to_corner(DOWN+LEFT)
-        compy.title = TextMobject(u"Ծրագրավորման\\\\ուսանող").to_corner(DOWN+RIGHT)
-        mathy.title = TextMobject(u" Մաթեմատիկոս").to_edge(DOWN)
+        creatures = [physy.scale(1), compy.scale(1), mathy.scale(1.1)]
+        physy.title = TextMobject(u"\\begin{center}\\footnotesize{Ֆիզիկայի \\\\ուսանող}\\end{center}").to_corner(DOWN+LEFT)
+        compy.title = TextMobject(u"\\begin{center}\\footnotesize{Ծրագրավորման\\\\ուսանող}\\end{center}").to_corner(DOWN+RIGHT)
+        mathy.title = TextMobject(u"\\footnotesize{Մաթեմատիկոս}").to_edge(DOWN+RIGHT)
         names = VMobject(physy.title, mathy.title, compy.title)
-        names.arrange_submobjects(RIGHT, buff = 1)
-        names.to_corner(DOWN+LEFT)
+        names.arrange_submobjects(RIGHT, buff = 2.2)
+        names.submobjects[1].shift(RIGHT*0.4)
+        names.to_corner(DOWN)
+        names.submobjects[0].shift(RIGHT*0.4)
         for pi in creatures:
             pi.next_to(pi.title, UP)
 
@@ -119,7 +121,7 @@ class DifferentConceptions(Scene):
             FadeOut(plane),
             FadeOut(labels),
             ApplyMethod(vector.shift, 4*LEFT+UP),
-            ApplyMethod(coordinates.shift, 2.5*RIGHT+0.5*DOWN),
+            ApplyMethod(coordinates.shift, 2.9*RIGHT+0.5*DOWN),
             ApplyMethod(symbol.shift, 0.5*(UP+LEFT))
         )
         self.remove(plane, labels)
@@ -205,7 +207,7 @@ class DifferentConceptions(Scene):
         self.fade_all_but(creatures, 1)
         physy, compy, mathy = creatures
 
-        title = TextMobject(u"Վեկտորներ $\\Leftrightarrow$ թվերի հավաքածուներ")
+        title = TextMobject(u"Վեկտորներ $\\Leftrightarrow$ թվերի ցուցակներ")
         title.to_edge(UP)
 
         vectors = VMobject(*map(matrix_to_mobject, [
@@ -246,6 +248,7 @@ class DifferentConceptions(Scene):
         price_words.highlight(GREEN)
         square_footage.next_to(square_footage_words)
         square_footage.highlight(RED)
+        square_footage.shift(0.09*UP)
         price.next_to(price_words)
         price.highlight(GREEN)
 
@@ -566,8 +569,8 @@ class CoordinateSystemWalkthrough(VectorScene):
             lambda m : isinstance(m, Line),
             plane.submobject_family()
         )
-        origin_words = TextMobject(u"Կորդինատների\\\\սկզբակետ")
-        origin_words.shift(2*UP+2*LEFT)
+        origin_words = TextMobject(u"\\begin{center}Կոորդինատների\\\\սկզբնակետ\\end{center}")
+        origin_words.shift(2*UP+2.3*LEFT)
         dot = Dot(radius = 0.1).highlight(RED)
         line = Line(origin_words.get_bottom(), dot.get_corner(UP+LEFT))
 
@@ -629,7 +632,7 @@ class CoordinateSystemWalkthrough(VectorScene):
         y_label_copy.highlight(Y_COLOR)
 
         point = Dot(4*LEFT+2*UP)
-        point_word = TextMobject(u"(-4, 2)-ը որպես \\\\կետ")
+        point_word = TextMobject(u"(-4, 2)-ը՝ \\\\որպես կետ")
         point_word.scale(0.7)
         point_word.next_to(point, DOWN)
         point.add(point_word)
@@ -701,7 +704,7 @@ class VectorAddition(VectorScene):
         self.dither()
         v_sum = self.add_vector(v2.get_end(), color = PINK)
         sum_tex = "\\vec{\\textbf{v}} + \\vec{\\textbf{w}}"
-        self.label_vector(v_sum, sum_tex, rotate = True)
+        self.label_vector(v_sum, sum_tex, rotate = True, buff_factor=1)
         self.dither(3)
         return v1, v2, v_sum
 
@@ -890,7 +893,7 @@ class VectorAdditionNumerically(VectorScene):
 
         starters = [x1, y1, x2, y2, sum_x_start, sum_y_start]
         variables = map(TexMobject, [
-            "x_1", "y_1", "x_2", "y_2", "x_1+y_1", "x_2+y_2"
+            "x_1", "y_1", "x_2", "y_2", "x_1+x_2", "y_1+y_2"
         ])
         for i, (var, starter) in enumerate(zip(variables, starters)):
             if i%2 == 0:
@@ -998,14 +1001,15 @@ class ShowScalarMultiplication(VectorScene):
         long_v = Vector(2*v.get_end())
         long_minus_v = Vector(-2*v.get_end())
         original_v = v.copy()
-        scaling_word = TextMobject(u'$``$Սկալյառներ$"$').to_corner(UP+LEFT)
-        scaling_word.shift(2*RIGHT)
+        scaling_word = TextMobject(u"\\textenglish{``Scaling''} — ձգում").to_corner(UP+LEFT)
+        scaling_word.shift(1.1 * RIGHT)
         scalars = VMobject(*map(TexMobject, [
             "2,", "\\dfrac{1}{3},", "-1.8,", "\\dots"
         ]))
         scalars.arrange_submobjects(RIGHT, buff = 0.4)
         scalars.next_to(scaling_word, DOWN, aligned_edge = LEFT)
-        scalars_word = TextMobject(u'$``$Սկալյառներ$"$')
+        scalars_word = TextMobject(u"\\textenglish{``Scalar''} — սկալյար")
+        #scalars_word = TextMobject(u'$``$Սկալյարներ$"$')
         scalars_word.next_to(scalars, DOWN, aligned_edge = LEFT)
 
         self.remove(plane)
@@ -1265,7 +1269,7 @@ class CodingMathyAnimation(Scene):
 
 class NextVideo(Scene):
     def construct(self):
-        title = TextMobject(u"Հաջորդ տեսանյութը․ «Գծային զուգակցություններ, գծային թաղանթ և հենք»").scale(0.8)
+        title = TextMobject(u"\scriptsize{Հաջորդ տեսանյութը․ «Գծային զուգակցություններ, գծային թաղանթ և հենք»}")
         title.to_edge(UP)
         rect = Rectangle(width = 16, height = 9, color = BLUE)
         rect.scale_to_fit_height(6)

@@ -294,7 +294,7 @@ class TeacherStudentsScene(Scene):
                          pi_creature_target_mode = None,
                          added_anims = []):
         bubble = pi_creature.get_bubble(bubble_type)
-        if isinstance(content, str):
+        if isinstance(content, str) or isinstance(content, unicode):
             content = TextMobject(content)
         bubble.position_mobject_inside(content)
         pi_creature.bubble = bubble        

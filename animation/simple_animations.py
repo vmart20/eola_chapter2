@@ -65,7 +65,7 @@ class Write(ShowCreation):
         "submobject_mode" : "lagged_start",
     }
     def __init__(self, mob_or_text, **kwargs):
-        if isinstance(mob_or_text, str):
+        if isinstance(mob_or_text, str) or isinstance(mob_or_text, unicode):
             mobject = TextMobject(mob_or_text)
         else:
             mobject = mob_or_text

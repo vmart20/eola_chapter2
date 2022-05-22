@@ -1,3 +1,7 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+# The above encoding declaration is required and the file must be saved as UTF-8
+
 from mobject.tex_mobject import TexMobject
 from mobject import Mobject
 from mobject.image_mobject import ImageMobject
@@ -23,15 +27,15 @@ from eola.two_d_space import *
 
 class OpeningQuote(Scene):
     def construct(self):
-        words = TextMobject("""
-            Mathematics requires a small dose, not of genius, \\\\
-            but of an imaginative freedom which, in a larger \\\\
-            dose, would be insanity.
+        words = TextMobject(u"""
+            Մաթեմատիկան պահանջում է ոչ թե հանճարեղության, \\\\
+            այլ երևակայության ազատության փոքր չափաբաժին, \\\\
+            որը շատ լինելու դեպքում խելագարություն կլիներ։
         """)
         words.to_edge(UP)    
-        for mob in words.submobjects[49:49+18]:
+        for mob in words.submobjects[43:43+23]:
             mob.highlight(GREEN)
-        author = TextMobject("-Angus K. Rodgers")
+        author = TextMobject(u"—Անգուս Ք․ Ռոջըրս")
         author.highlight(YELLOW)
         author.next_to(words, DOWN, buff = 0.5)
 
@@ -44,9 +48,9 @@ class OpeningQuote(Scene):
 class CoordinatesWereFamiliar(TeacherStudentsScene):
     def construct(self):
         self.setup()
-        self.student_says("I know this already")
+        self.student_says(u"Դա արդեն գիտեմ")
         self.random_blink()
-        self.teacher_says("Ah, but there is a subtlety")
+        self.teacher_says(u"Հա, բայց այսպիսի նրբություն կա")
         self.random_blink()
         self.dither()
 
@@ -70,7 +74,7 @@ class CoordinatesAsScalars(VectorScene):
     def general_idea_of_scalars(self, array, vector):
         starting_mobjects = self.get_mobjects()
 
-        title = TextMobject("Think of each coordinate as a scalar")
+        title = TextMobject(u"\\scriptsize{Պատկերացնենք յուրաքանչյուր կոորդինատը որպես մի իրական թիվ}")
         title.to_edge(UP)
 
         x, y = array.get_mob_matrix().flatten()
@@ -200,10 +204,10 @@ class CoordinatesAsScalarsExample2(CoordinatesAsScalars):
         labels = self.get_basis_vector_labels()
         self.add(*basis_vectors)
         self.add(*labels)
-        text = TextMobject("""
-            $\\hat{\\imath}$ and $\\hat{\\jmath}$ 
-            are the ``basis vectors'' \\\\
-            of the $xy$ coordinate system
+        text = TextMobject(u"""
+            $\\hat{\\imath}$-ն և $\\hat{\\jmath}$-ն
+            $xy$ կոորդինատային համակարգի \\\\
+            «հենքային վեկտորներն» են 
         """)
         text.scale_to_fit_width(SPACE_WIDTH-1)
         text.to_corner(UP+RIGHT)
@@ -211,14 +215,51 @@ class CoordinatesAsScalarsExample2(CoordinatesAsScalars):
         VMobject(*text.split()[5:7]).highlight(Y_COLOR)
         self.play(Write(text))
         self.dither(2)
-        self.remove(*basis_vectors + labels)
-        CoordinatesAsScalars.construct(self)
+
+        vector = Vector(self.vector_coords, color = YELLOW)
+        array = vector_coordinate_label(vector, integer_labels = True)
+        array.shift(
+            -array.get_boundary_point(-vector.get_end()) + \
+            1.1*vector.get_end()
+        )
+        self.play(FadeIn(vector), FadeIn(array))
+
+        i_hat, j_hat = basis_vectors
+
+        i_hat_label, j_hat_label = labels
+
+        x, y = array.get_mob_matrix().flatten()
+        for coord, v, label, factor, shift_right in [
+            (x, i_hat, i_hat_label, self.vector_coords[0], False), 
+            (y, j_hat, j_hat_label, self.vector_coords[1], True)
+            ]:
+            faded_v = v.copy().fade(0.7)
+            scaled_v = Vector(factor*v.get_end(), color = v.get_color())
+
+            scaled_label = VMobject(coord.copy(), label.copy())
+            scaled_label.arrange_submobjects(RIGHT, buff = 0.1)
+            scaled_label.move_to(label, DOWN+RIGHT)
+            scaled_label.shift((scaled_v.get_end()-v.get_end())/2)
+            coord_copy = coord.copy()
+            self.play(
+                Transform(v.copy(), faded_v),
+                Transform(v, scaled_v),
+                Transform(VMobject(coord_copy, label), scaled_label),
+            )
+            self.dither()
+            if shift_right:
+                group = VMobject(v, coord_copy, label)
+                self.play(ApplyMethod(
+                    group.shift, self.vector_coords[0]*RIGHT
+                ))
+        self.dither()
+        self.show_symbolic_sum(array, vector)
 
 
 class WhatIfWeChoseADifferentBasis(Scene):
     def construct(self):
         self.play(Write(
-            "What if we chose different basis vectors?",
+            u"Իսկ ի՞նչ, եթե ընտրեինք այլ հենքային վեկտորներ",
             run_time = 2
         ))
         self.dither(2)
@@ -452,13 +493,14 @@ class NameLinearCombinations(Scene):
         v_color = MAROON_C
         w_color = BLUE
         words = TextMobject([
-            "``Linear combination'' of",
-            "$\\vec{\\textbf{v}}$",
-            "and",
-            "$\\vec{\\textbf{w}}$"
+            "\\textenglish{$\\vec{\\textbf{v}}$}",
+            u"և",
+            "\\textenglish{$\\vec{\\textbf{w}}$}",
+            u"վեկտորների",
+            u"«գծային զուգակցություն»",
         ])
-        words.split()[1].highlight(v_color)
-        words.split()[3].highlight(w_color)
+        words.split()[0].highlight(v_color)
+        words.split()[2].highlight(w_color)
         words.scale_to_fit_width(2*SPACE_WIDTH - 1)
         words.to_edge(UP)
 
@@ -472,7 +514,7 @@ class NameLinearCombinations(Scene):
         equation.scale(2)
         equation.next_to(words, DOWN, buff = 1)
 
-        scalars_word = TextMobject("Scalars")
+        scalars_word = TextMobject(u"Սկալյարներ")
         scalars_word.scale(1.5)
         scalars_word.next_to(equation, DOWN, buff = 2)
         arrows = [
@@ -595,18 +637,17 @@ class DefineSpan(Scene):
         v_color = MAROON_C
         w_color = BLUE
 
-        definition = TextMobject("""
-            The ``span'' of $\\vec{\\textbf{v}}$ and 
-            $\\vec{\\textbf{w}}$ is the \\\\ set of all their
-            linear combinations.
+        definition = TextMobject(u"""
+            \\textenglish{$\\vec{\\textbf{v}}$} և \\textenglish{$\\vec{\\textbf{w}}$} վեկտորների «գծային թաղանթը» դրանց բոլոր \\\\ 
+            գծային զուգակցությունների բազմությունն է։
         """)
         definition.scale_to_fit_width(2*SPACE_WIDTH-1)
         definition.to_edge(UP)
         def_mobs = np.array(definition.split())
-        VMobject(*def_mobs[4:4+4]).highlight(PINK)
-        VMobject(*def_mobs[11:11+2]).highlight(v_color)
-        VMobject(*def_mobs[16:16+2]).highlight(w_color)
-        VMobject(*def_mobs[-19:-1]).highlight(YELLOW)
+        VMobject(*def_mobs[15:30]).highlight(PINK)
+        VMobject(*def_mobs[0:2]).highlight(v_color)
+        VMobject(*def_mobs[4:5]).highlight(w_color)
+        VMobject(*def_mobs[-38:-14]).highlight(YELLOW)
 
         equation = TexMobject([
             "a", "\\vec{\\textbf{v}}", "+", "b", "\\vec{\\textbf{w}}"
@@ -619,7 +660,7 @@ class DefineSpan(Scene):
         equation.next_to(definition, DOWN, buff = 1)
 
         vary_words = TextMobject(
-            "Let $a$ and $b$ vary \\\\ over all real numbers"
+            u"Դիցուք \\textenglish{$a$}-ն ու \\textenglish{$b$}-ն փոփոխվում են \\\\ ողջ իրական թվերի առանցքով"
         )
         vary_words.scale(1.5)
         vary_words.next_to(equation, DOWN, buff = 2)
@@ -640,7 +681,7 @@ class DefineSpan(Scene):
 
 class VectorsVsPoints(Scene):
     def construct(self):
-        self.play(Write("Vectors vs. Points"))
+        self.play(Write(u"Վեկտորնե՞ր, թե՞ կետեր"))
         self.dither(2)
 
 
@@ -770,8 +811,8 @@ class HowToThinkVectorsVsPoint(Scene):
     def construct(self):
         randy = Randolph().to_corner()
         bubble = randy.get_bubble(height = 3.8)
-        text1 = TextMobject("Think of individual vectors as arrows")
-        text2 = TextMobject("Think of sets of vectors as points")
+        text1 = TextMobject(u"\\footnotesize{Առանձին վեկտորները պատկերացնենք որպես սլաքներ}")
+        text2 = TextMobject(u"\\footnotesize{Վեկտորների բազմությունը պատկերացնենք որպես կետեր}")
         for text in text1, text2:
             text.to_edge(UP)
 
@@ -811,7 +852,7 @@ class IntroduceThreeDSpan(Scene):
 
 class AskAboutThreeDSpan(Scene):
     def construct(self):
-        self.play(Write("What does the span of two 3d vectors look like?"))
+        self.play(Write(u"\\footnotesize{Ի՞նչ տեսք ունի երկու եռաչափ վեկտորների գծային թաղանթը}"))
         self.dither(2)
 
 class ThreeDVectorSpan(Scene):
@@ -826,24 +867,23 @@ class VaryingLinearCombinationOfThreeVectors(Scene):
 
 class LinearCombinationOfThreeVectorsText(Scene):
     def construct(self):
-        text = TextMobject("""
-            Linear combination of 
-            $\\vec{\\textbf{v}}$, 
-            $\\vec{\\textbf{w}}$, and
-            $\\vec{\\textbf{u}}$:
+        text = TextMobject(u"""
+            \\textenglish{$\\vec{\\textbf{v}}$}, 
+            \\textenglish{$\\vec{\\textbf{w}}$} և
+            \\textenglish{$\\vec{\\textbf{u}}$} վեկտորների գծային զուգակցություն՝
         """)
-        VMobject(*text.split()[-12:-10]).highlight(MAROON_C)
-        VMobject(*text.split()[-9:-7]).highlight(BLUE)
-        VMobject(*text.split()[-3:-1]).highlight(RED_C)
-        VMobject(*text.split()[:17]).highlight(GREEN)        
+        VMobject(*text.split()[0:2]).highlight(MAROON_C)
+        VMobject(*text.split()[3:5]).highlight(BLUE)
+        VMobject(*text.split()[6:8]).highlight(RED_C)
+        VMobject(*text.split()[-21:-1]).highlight(GREEN)        
         text.scale_to_fit_width(2*SPACE_WIDTH - 1)
         text.to_edge(UP)
 
-        equation = TextMobject("""$
+        equation = TextMobject("""\\textenglish{$
             a\\vec{\\textbf{v}} + 
             b\\vec{\\textbf{w}} + 
             c\\vec{\\textbf{u}}
-        $""")
+        $}""")
         VMobject(*equation.split()[-10:-8]).highlight(MAROON_C)
         VMobject(*equation.split()[-6:-4]).highlight(BLUE)
         VMobject(*equation.split()[-2:]).highlight(RED_C)
@@ -853,10 +893,10 @@ class LinearCombinationOfThreeVectorsText(Scene):
         equation.scale(1.5)
         equation.next_to(text, DOWN, buff = 1)
 
-        span_comment = TextMobject("For span, let these constants vary")
-        span_comment.scale(1.5)
+        span_comment = TextMobject(u"Գծային թաղանթը ստանալու համար փոփոխենք այս գործակիցները")
+        span_comment.scale(1)
         span_comment.next_to(equation, DOWN, buff = 2)
-        VMobject(*span_comment.split()[3:7]).highlight(YELLOW)
+        VMobject(*span_comment.split()[0:13]).highlight(YELLOW)
         arrows = VMobject(*[
             Arrow(span_comment, var)
             for var in a, b, c
@@ -909,26 +949,31 @@ class SpanCasesWords(Scene):
 class LinearDependentWords(Scene):
     def construct(self):
         words1 = TextMobject([
-            "$\\vec{\\textbf{v}}$", 
-            "and",
-            "$\\vec{\\textbf{w}}$",
-            "are",
-            "``Linearly dependent'' ",
+            "\\textenglish{$\\vec{\\textbf{v}}$}", 
+            u"-ն",
+            u"և",
+            "\\textenglish{$\\vec{\\textbf{w}}$}",
+            u"-ն",
+            u"«գծորեն կախված»",
+            u"են",
         ])
-        v, _and, w, are, rest = words1.split()
+        v, _, _and,  w, _, rest, _ = words1.split()
         v.highlight(MAROON_C)
         w.highlight(BLUE)
         rest.highlight(YELLOW)
 
         words2 = TextMobject([
-            "$\\vec{\\textbf{v}}$,", 
-            "$\\vec{\\textbf{w}}$",
-            "and",
-            "$\\vec{\\textbf{u}}$",
-            "are",
-            "``Linearly dependent'' ",
+            "\\textenglish{$\\vec{\\textbf{v}}$}", 
+            u"-ն,",
+            "\\textenglish{$\\vec{\\textbf{w}}$}",
+            u"-ն",
+            u"և",
+            "\\textenglish{$\\vec{\\textbf{u}}$}",
+            u"-ն",
+            u"«գծորեն կախված»",
+            u"են",
         ])
-        v, w, _and, u, are, rest = words2.split()
+        v, _, w, _, _and, u, _, rest,_ = words2.split()
         v.highlight(MAROON_C)
         w.highlight(BLUE)
         u.highlight(RED_C)
@@ -945,7 +990,7 @@ class LinearDependentWords(Scene):
 
 class LinearDependentEquations(Scene):
     def construct(self):
-        title = TextMobject("``Linearly dependent'' ")
+        title = TextMobject(u"\\tiny{«Գծորեն կախված» }")
         title.highlight(YELLOW)
         title.scale(2)
         title.to_edge(UP)
@@ -963,7 +1008,7 @@ class LinearDependentEquations(Scene):
         equation1.scale(2)
         eq1_copy = equation1.copy()
 
-        low_words1 = TextMobject("For some value of $a$")
+        low_words1 = TextMobject(u"\\tiny{\\textenglish{$a$}-ի ինչ-որ արժեքների համար}")
         low_words1.scale(2)
         low_words1.to_edge(DOWN)
         arrow = Arrow(low_words1, a)
@@ -985,7 +1030,7 @@ class LinearDependentEquations(Scene):
         equation2.scale(2)
         eq2_copy = equation2.copy()
 
-        low_words2 = TextMobject("For some values of a and b")
+        low_words2 = TextMobject(u"\\tiny{\\textenglish{$a$}-ի և \\textenglish{$b$}-ի ինչ-որ արժեքների համար}")
         low_words2.scale(2)
         low_words2.to_edge(DOWN)
         arrows = VMobject(*[
@@ -1007,7 +1052,7 @@ class LinearDependentEquations(Scene):
         )
         self.dither(2)
 
-        new_title = TextMobject("``Linearly independent'' ")
+        new_title = TextMobject(u"\\tiny{«Գծորեն անկախ» }")
         new_title.highlight(GREEN)
         new_title.replace(title)
 
@@ -1016,8 +1061,8 @@ class LinearDependentEquations(Scene):
             neq.replace(eq_copy.submobjects[1])
             eq_copy.submobjects[1] = neq
 
-        new_low_words1 = TextMobject(["For", "all", "values of a"])
-        new_low_words2 = TextMobject(["For", "all", "values of a and b"])
+        new_low_words1 = TextMobject([u"\\tiny{\\textenglish{$a$}-ի}", u"\\tiny{կամայական}", u"\\tiny{արժեքների համար}"])
+        new_low_words2 = TextMobject([u"\\tiny{\\textenglish{$a$}-ի և \\textenglish{$b$}-ի}", u"\\tiny{կամայական}", u"\\tiny{արժեքների համար}"])
         for low_words in new_low_words1, new_low_words2:
             low_words.split()[1].highlight(GREEN)
             low_words.scale(2)
@@ -1232,7 +1277,7 @@ class MathematiciansLikeToConfuse(TeacherStudentsScene):
 class CheckYourUnderstanding(TeacherStudentsScene):
     def construct(self):
         self.setup()
-        self.teacher_says("Quiz time!")
+        self.teacher_says(u"Հարցերի ժամանա՜կն է")
         self.random_blink()
         self.dither()
         self.random_blink()
@@ -1241,16 +1286,16 @@ class CheckYourUnderstanding(TeacherStudentsScene):
 
 class TechnicalDefinitionOfBasis(Scene):
     def construct(self):
-        title  = TextMobject("Technical definition of basis:")
+        title  = TextMobject(u"Հենքի ճշգրիտ սահմանումը՝")
         title.to_edge(UP)
         definition = TextMobject([
-            "The",
-            "basis",
-            "of a vector space is a set of",
-            "linearly independent",
-            "vectors that",
-            "span",
-            "the full space",
+            u"Գծային տարածության",
+            u"հենք",
+            u"է կոչվում",
+            u"գծորեն անկախ",
+            u"վեկտորների բազմությունը, որոնց",
+            u"գծային թաղանթը",
+            u"տվյալ տարածությունն է։"
         ])
         t, b, oavsiaso, li, vt, s, tfs = definition.split()
         b.highlight(BLUE)
@@ -1264,7 +1309,7 @@ class TechnicalDefinitionOfBasis(Scene):
 
 class NextVideo(Scene):
     def construct(self):
-        title = TextMobject("Next video: Matrices as linear transformations")
+        title = TextMobject(u"\\scriptsize{Հաջորդ տեսանյութը․ «Մատրիցները՝ որպես գծային ձևափոխություն»}")
         title.to_edge(UP)
         rect = Rectangle(width = 16, height = 9, color = BLUE)
         rect.scale_to_fit_height(6)
